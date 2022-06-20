@@ -77,6 +77,8 @@ input AddMwFeesToCartInput {
 input MwFeeDataInput {
     fee_id: Int! @doc(description: "Fee ID")
     fee_option_ids: [Int!]! @doc(description: "An array of fee option IDs")
+    message: String
+    date: String
 }
 
 input AddMwProductFeesToCartInput {

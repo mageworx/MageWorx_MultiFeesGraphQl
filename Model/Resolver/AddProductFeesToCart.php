@@ -111,6 +111,13 @@ class AddProductFeesToCart implements ResolverInterface
                 ->setId($datum['fee_id'])
                 ->setOptions(implode(',', $datum['fee_option_ids']));
 
+            if (!empty($datum['message'])) {
+                $feeDataObject->setMessage($datum['message']);
+            }
+            if (!empty($datum['date'])) {
+                $feeDataObject->setDate($datum['date']);
+            }
+
             $objects[] = $feeDataObject;
         }
 

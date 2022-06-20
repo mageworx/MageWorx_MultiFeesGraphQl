@@ -92,7 +92,7 @@ abstract class AbstractFee implements ResolverInterface
                     'id'          => (int)$option['fee_option_id'],
                     'field_label' => $option['field_label'],
                     'is_default'  => (bool)$option['is_default'],
-                    'position'    => (int)$option['price'],
+                    'position'    => (int)$option['position'],
                     'title'       => $option['title'],
                     'price_type'  => $option['price_type'],
                     'price'       => (float)$option['price']
