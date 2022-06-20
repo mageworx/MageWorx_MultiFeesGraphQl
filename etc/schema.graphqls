@@ -10,6 +10,10 @@ type Cart {
     mw_product_fees: [MwProductFee] @doc(description: "Product Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\ProductFees")
 }
 
+interface ProductInterface {
+    mw_product_hidden_fees: [MwFee] @doc(description: "Product Hidden Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Product\\ProductHiddenFees")
+}
+
 type Mutation {
     addMwCartFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Cart Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddCartFeesToCart")
     addMwShippingFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Shipping Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddShippingFeesToCart")
