@@ -10,6 +10,10 @@ type Cart {
     mw_product_fees: [MwProductFee] @doc(description: "Product Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\ProductFees")
 }
 
+interface CartItemInterface {
+    mw_applied_product_fees: [MwAppliedFee] @doc(description: "Applied Product Fees") @resolver (class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Cart\\Item\\AppliedProductFees")
+}
+
 interface ProductInterface {
     mw_product_hidden_fees: [MwFee] @doc(description: "Product Hidden Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Product\\ProductHiddenFees")
 }

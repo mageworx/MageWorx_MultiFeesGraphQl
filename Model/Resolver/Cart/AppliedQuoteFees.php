@@ -60,25 +60,8 @@ class AppliedQuoteFees extends AbstractAppliedFees
 
         if (is_array(current($quoteFeeDetail))) {
             foreach (current($quoteFeeDetail) as $feeId => $feeData) {
-                $quoteFeeData[] = [
-                    'id'               => (int)$feeId,
-                    'title'            => $feeData[FeeInterface::TITLE],
-                    'type'             => $this->enumLookup->getEnumValueFromField(
-                        'MwFeeTypeEnum',
-                        $feeData[FeeInterface::TYPE]
-                    ),
-                    'customer_message' => empty($feeData['message']) ? '' : $feeData['message'],
-                    'date'             => empty($feeData['date']) ? '' : $feeData['date'],
-                    'price'            => [
-                        'value'    => $this->priceCurrency->roundPrice((float)$feeData['price']),
-                        'currency' => $currencyCode
-                    ],
-                    'tax'              => [
-                        'value'    => $this->priceCurrency->roundPrice((float)$feeData['tax']),
-                        'currency' => $currencyCode
-                    ],
-                    'options'          => $this->getPreparedOprions($feeData['options'], $currencyCode)
-                ];
+                $feeData[FeeInterface::FEE_ID] = $feeId;
+                $quoteFeeData[]                = $this->getPreparedFeeData($feeData, $currencyCode);
             }
         }
 

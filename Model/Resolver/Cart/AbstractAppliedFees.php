@@ -11,6 +11,7 @@ namespace MageWorx\MultiFeesGraphQl\Model\Resolver\Cart;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use MageWorx\MultiFees\Api\Data\FeeInterface;
 
 abstract class AbstractAppliedFees implements ResolverInterface
 {
@@ -35,11 +36,40 @@ abstract class AbstractAppliedFees implements ResolverInterface
     }
 
     /**
+     * @param array $feeData
+     * @param string $currencyCode
+     * @return array
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    protected function getPreparedFeeData(array $feeData, string $currencyCode): array
+    {
+        return [
+            'id'               => (int)$feeData[FeeInterface::FEE_ID],
+            'title'            => $feeData[FeeInterface::TITLE],
+            'type'             => $this->enumLookup->getEnumValueFromField(
+                'MwFeeTypeEnum',
+                $feeData[FeeInterface::TYPE]
+            ),
+            'customer_message' => empty($feeData['message']) ? '' : $feeData['message'],
+            'date'             => empty($feeData['date']) ? '' : $feeData['date'],
+            'price'            => [
+                'value'    => $this->priceCurrency->roundPrice((float)$feeData['price']),
+                'currency' => $currencyCode
+            ],
+            'tax'              => [
+                'value'    => $this->priceCurrency->roundPrice((float)$feeData['tax']),
+                'currency' => $currencyCode
+            ],
+            'options'          => $this->getPreparedOptions($feeData['options'], $currencyCode)
+        ];
+    }
+
+    /**
      * @param array $options
      * @param string $currencyCode
      * @return array
      */
-    protected function getPreparedOprions(array $options, string $currencyCode): array
+    protected function getPreparedOptions(array $options, string $currencyCode): array
     {
         $data = [];
 
