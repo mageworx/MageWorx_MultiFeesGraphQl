@@ -15,6 +15,19 @@
                     <item name="shipping" xsi:type="string">3</item>
                     <item name="product" xsi:type="string">4</item>
                 </item>
+                <item name="MwHiddenFeePositionEnum" xsi:type="array">
+                    <item name="below_add_to_cart" xsi:type="string">1</item>
+                    <item name="above_add_to_cart" xsi:type="string">2</item>
+                </item>
+                <item name="MwFeeTaxCalculationTypeEnum" xsi:type="array">
+                    <item name="excluding_tax" xsi:type="string">0</item>
+                    <item name="including_tax" xsi:type="string">1</item>
+                </item>
+                <item name="MwFeeAmountTypeEnum" xsi:type="array">
+                    <item name="excluding_tax" xsi:type="string">1</item>
+                    <item name="including_tax" xsi:type="string">2</item>
+                    <item name="including_and_excluding_tax" xsi:type="string">3</item>
+                </item>
             </argument>
         </arguments>
     </type>
