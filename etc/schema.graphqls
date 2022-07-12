@@ -1,0 +1,134 @@
+# Copyright © MageWorx, Inc. All rights reserved.
+# See https://www.mageworx.com/terms-and-conditions for license details.
+
+type StoreConfig {
+    mw_multi_fees_is_enabled: Boolean @doc(description: "Indicates whether the MultiFees functionality is enabled") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\MultiFeesIsEnabled")
+    mw_display_product_fee_on_product_page_is_enabled: Boolean @doc(description: "Indicates whether the product fee display is enabled on the product page") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\DisplayProductFeeOnProductPageIsEnabled")
+    mw_fees_block_label_on_product_page: String @doc(description: "The label for the fees block that is displayed on the product page") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\FeesBlockLabelOnProductPage")
+    mw_product_fees_position: MwHiddenFeePositionEnum @doc(description: "Either BELOW_ADD_TO_CART or ABOVE_ADD_TO_CART") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\ProductFeesPosition")
+    mw_apply_fee_on_click_is_enabled: Boolean @doc(description: "Indicates whether to apply fee on click") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\ApplyFeeOnClickIsEnabled")
+    mw_multi_fees_tax_calculation_type: MwFeeTaxCalculationTypeEnum @doc(description: "Either EXCLUDING_TAX or INCLUDING_TAX") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\MultiFeesTaxCalculationType")
+    mw_prices_type_in_additional_fees_block: MwFeeAmountTypeEnum @doc(description: "Either EXCLUDING_TAX, INCLUDING_TAX or INCLUDING_AND_EXCLUDING_TAX") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\PricesTypeInAdditionalFeesBlock")
+    mw_additional_fees_amount_type_in_cart_total: MwFeeAmountTypeEnum @doc(description: "Either EXCLUDING_TAX, INCLUDING_TAX or INCLUDING_AND_EXCLUDING_TAX") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\StoreConfig\\AdditionalFeesAmountTypeInCartTotal")
+}
+
+type Cart {
+    mw_applied_quote_fees: [MwAppliedFee] @doc(description: "Applied Quote Fees") @resolver (class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Cart\\AppliedQuoteFees")
+    mw_applied_product_fees: [MwAppliedProductFee] @doc(description: "Applied Product Fees") @resolver (class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Cart\\AppliedProductFees")
+    mw_cart_fees: [MwFee] @doc(description: "Cart Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\CartFees")
+    mw_shipping_fees: [MwFee] @doc(description: "Shipping Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\ShippingFees")
+    mw_payment_fees: [MwFee] @doc(description: "Payment Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\PaymentFees")
+    mw_product_fees: [MwProductFee] @doc(description: "Product Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\ProductFees")
+}
+
+interface CartItemInterface {
+    mw_applied_product_fees: [MwAppliedFee] @doc(description: "Applied Product Fees") @resolver (class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Cart\\Item\\AppliedProductFees")
+}
+
+interface ProductInterface {
+    mw_product_hidden_fees: [MwFee] @doc(description: "Product Hidden Fees") @resolver(class: "MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\Product\\ProductHiddenFees")
+}
+
+type Mutation {
+    addMwCartFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Cart Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddCartFeesToCart")
+    addMwShippingFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Shipping Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddShippingFeesToCart")
+    addMwPaymentFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Payment Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddPaymentFeesToCart")
+    addMwProductFeesToCart(input: AddMwProductFeesToCartInput): AddMwFeesToCartOutput @doc(description: "Add Product Fees to Cart") @resolver(class: "\\MageWorx\\MultiFeesGraphQl\\Model\\Resolver\\AddProductFeesToCart")
+}
+
+type MwAppliedFee {
+    id: Int @doc(description: "Fee ID")
+    title: String @doc(description: "Fee Title")
+    type: MwFeeTypeEnum @doc(description: "Either CART, SHIPPING, PAYMENT or PRODUCT")
+    customer_message: String @doc(description: "Customer Message")
+    date: String @doc(description: "Date Field Title")
+    price: Money
+    tax: Money
+    options: [MwAppliedFeeOption]
+}
+
+type MwAppliedFeeOption {
+    id: Int @doc(description: "Option ID")
+    title: String @doc(description: "Option Title")
+    price: Money
+    tax: Money
+}
+
+type MwAppliedProductFee {
+    quote_item_id: Int @doc(description: "Quote Item ID")
+    fees: [MwAppliedFee] @doc(description: "Product Fees")
+}
+
+type MwFee {
+    id: Int @doc(description: "Fee ID")
+    title: String @doc(description: "Fee Title")
+    description: String @doc(description: "Fee Description")
+    input_type: String @doc(description: "Fee Input Type")
+    is_required: Boolean @doc(description: "Indicates whether the fee is required")
+    is_enabled_customer_message: Boolean @doc(description: "Indicates whether the customer message field is enabled")
+    customer_message_title: String @doc(description: "Customer Message Field Title")
+    is_enabled_date_field: Boolean @doc(description: "Indicates whether the date field is enabled")
+    date_field_title: String @doc(description: "Date Field Title")
+    sort_order: Int @doc(description: "Fee Sort Order")
+    options: [MwFeeOption] @doc(description: "An array of fee options")
+}
+
+type MwProductFee {
+    quote_item_id: Int @doc(description: "Quote Item ID")
+    fees: [MwFee] @doc(description: "Product Fees")
+}
+
+type MwFeeOption {
+    id: Int @doc(description: "Option ID")
+    field_label: String @doc(description: "Option Field Label")
+    is_default: Boolean @doc(description: "Indicates whether the given option is the default option")
+    position: Int @doc(description: "Option Position")
+    title: String @doc(description: "Option Title")
+    price_type: String @doc(description: "Option Price Type")
+    price: Float @doc(description: "Option Price")
+}
+
+input AddMwFeesToCartInput {
+    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+    fee_data: [MwFeeDataInput!]!
+}
+
+input MwFeeDataInput {
+    fee_id: Int! @doc(description: "Fee ID")
+    fee_option_ids: [Int!]! @doc(description: "An array of fee option IDs")
+    message: String
+    date: String
+}
+
+input AddMwProductFeesToCartInput {
+    cart_id: String! @doc(description:"The unique ID that identifies the customer's cart")
+    fee_data: [MwFeeDataInput!]!
+    quote_item_id: Int! @doc(description: "Quote Item ID")
+}
+
+type AddMwFeesToCartOutput {
+    cart: Cart! @doc(description: "Describes the contents of the specified shopping cart")
+}
+
+enum MwFeeTypeEnum @doc(description: "This enumeration defines the types of fees") {
+    CART
+    SHIPPING
+    PAYMENT
+    PRODUCT
+}
+
+enum MwHiddenFeePositionEnum @doc(description: "This enumeration defines the positions of the hidden fees") {
+    BELOW_ADD_TO_CART
+    ABOVE_ADD_TO_CART
+}
+
+enum MwFeeTaxCalculationTypeEnum @doc(description: "This enumeration defines the type of the fee tax calculation") {
+    EXCLUDING_TAX
+    INCLUDING_TAX
+}
+
+enum MwFeeAmountTypeEnum @doc(description: "This enumeration defines the type of the fee amount") {
+    EXCLUDING_TAX
+    INCLUDING_TAX
+    INCLUDING_AND_EXCLUDING_TAX
+}
