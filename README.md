@@ -5,7 +5,7 @@ GraphQL API module for Mageworx [Magento 2 Multi Fees](https://www.mageworx.com/
 ## Installation
 
 **1) Installation using composer (from packagist)**
-- Execute the following command: `composer require mageworx/module-multifeesgraphql`
+- Execute the following command: `composer require mageworx/module-multifees-graphql`
 
 **2) Copy-to-paste method**
 - Download this module and upload it to the `app/code/MageWorx/MultiFeesGraphQl` directory *(create "MultiFeesGraphQl" first if missing)*
