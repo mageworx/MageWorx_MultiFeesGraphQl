@@ -12,8 +12,10 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
@@ -55,7 +57,7 @@ class AddProductFeesToCart implements ResolverInterface
 
     /**
      * @param Field $field
-     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
@@ -64,9 +66,9 @@ class AddProductFeesToCart implements ResolverInterface
      * @throws GraphQlNoSuchEntityException
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException
+     * @throws GraphQlAuthorizationException
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): ?array
     {
         $this->validateParameters($args);
 
@@ -134,7 +136,7 @@ class AddProductFeesToCart implements ResolverInterface
      * @param array|null $args
      * @throws GraphQlInputException
      */
-    protected function validateParameters(array $args = null): void
+    protected function validateParameters(?array $args = null): void
     {
         if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));

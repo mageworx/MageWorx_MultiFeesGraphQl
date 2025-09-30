@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace MageWorx\MultiFeesGraphQl\Model\Resolver\Product;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote\ItemFactory as QuoteItemFactory;
@@ -70,20 +72,20 @@ class ProductHiddenFees implements ResolverInterface
 
     /**
      * @param Field $field
-     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
      * @return array
      * @throws LocalizedException
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): ?array
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $value['model'];
 
         $quoteItem = $this->quoteItemFactory->create();
@@ -139,6 +141,8 @@ class ProductHiddenFees implements ResolverInterface
     /**
      * @param FeeInterface $fee
      * @return array
+     * @throws LocalizedException
+     * @throws LocalizedException
      */
     protected function getPreparedFeeOptions(FeeInterface $fee): array
     {
@@ -149,9 +153,15 @@ class ProductHiddenFees implements ResolverInterface
                 continue;
             }
 
+            try {
+                $labelPriceTitle = ' - ' . $this->helperPrice->getOptionFormatPrice($option, $fee);
+            } catch (LocalizedException $e) {
+                $labelPriceTitle = '';
+            }
+
             $options[] = [
                 'id'          => (int)$option->getId(),
-                'field_label' => $option->getTitle() . ' - ' . $this->helperPrice->getOptionFormatPrice($option, $fee),
+                'field_label' => $option->getTitle() . $labelPriceTitle,
                 'is_default'  => (bool)$option->getIsDefault(),
                 'position'    => (int)$option->getPosition(),
                 'title'       => $option->getTitle(),

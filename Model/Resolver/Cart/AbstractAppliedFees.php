@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace MageWorx\MultiFeesGraphQl\Model\Resolver\Cart;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -39,7 +40,7 @@ abstract class AbstractAppliedFees implements ResolverInterface
      * @param array $feeData
      * @param string $currencyCode
      * @return array
-     * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws RuntimeException
      */
     protected function getPreparedFeeData(array $feeData, string $currencyCode): array
     {

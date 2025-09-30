@@ -179,7 +179,7 @@ mutation {
 **Syntax**  
 `addMwShippingFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput`
   
-The requiest is similar to the mutation of addMwCartFeesToCart.  
+The request is similar to the mutation of addMwCartFeesToCart.  
   
 ### Add payment fees to the shopping cart. 
 
@@ -188,7 +188,7 @@ The requiest is similar to the mutation of addMwCartFeesToCart.
 **Syntax**  
 `addMwPaymentFeesToCart(input: AddMwFeesToCartInput): AddMwFeesToCartOutput`
   
-The requiest is similar to the mutation of addMwCartFeesToCart.  
+The request is similar to the mutation of addMwCartFeesToCart.  
   
 ### Add product fees to the shopping cart
 
