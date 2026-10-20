@@ -2,10 +2,10 @@
     "name": "mageworx/module-multifees-graphql",
     "description": "MageWorx Multi Fees GraphQl",
     "require": {
-        "mageworx/module-multifees": ">= 2.4.0"
+        "mageworx/module-multifees": ">= 2.7.0"
     },
     "type": "magento2-module",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
